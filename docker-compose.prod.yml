@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   mattermost:
-    image: mattermost/mattermost-enterprise-edition:6.3
+    image: ghcr.io/jimmylevell/mattermost/mattermost:latest
     security_opt:
       - no-new-privileges:true
     networks:
