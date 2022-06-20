@@ -1,0 +1,42 @@
+version: "3.1"
+
+services:
+  mattermost:
+    image: mattermost/mattermost-enterprise-edition:6.3
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik-public
+      - levell
+    environment:
+      TZ: Europe/Prague
+      MM_SQLSETTINGS_DRIVERNAME: postgres
+      MM_SQLSETTINGS_DATASOURCE: postgres://test:test@levell-postgres:5432/mattermost?sslmode=disable&connect_timeout=10
+      MM_SERVICESETTINGS_SITEURL: https://mattermost.app.levell.ch
+
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true # enable traefik
+        - traefik.docker.network=traefik-public # put it in the same network as traefik
+        - traefik.constraint-label=traefik-public # assign the same label as traefik so it can be discovered
+        - traefik.http.routers.mattermost.rule=Host(`mattermost.app.levell.ch`) # listen to port 80 for request to APP_DOMAIN (use together with the line below)
+        - traefik.http.routers.mattermost.entrypoints=http
+        - traefik.http.routers.mattermost.middlewares=https-redirect
+        - traefik.http.middlewares.mattermost.redirectscheme.scheme=https # redirect traffic to https
+        - traefik.http.middlewares.mattermost.redirectscheme.permanent=true # redirect traffic to https
+        - traefik.http.routers.mattermost-secured.rule=Host(`mattermost.app.levell.ch`) # listen to port 443 for request to APP_DOMAIN (use together with the line below)
+        - traefik.http.routers.mattermost-secured.entrypoints=https
+        - traefik.http.routers.mattermost-secured.tls.certresolver=le # use the Let's Encrypt certificate we set up earlier
+        - traefik.http.services.mattermost-secured.loadbalancer.server.port=8065 # ask Traefik to search for port of the service container
+
+networks:
+   traefik-public:
+    external: true
+   levell:
+    external: true
