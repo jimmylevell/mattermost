@@ -11,9 +11,10 @@ services:
     environment:
       TZ: Europe/Prague
       MM_SQLSETTINGS_DRIVERNAME: postgres
-      MM_SQLSETTINGS_DATASOURCE: postgres://test:test@levell-postgres:5432/mattermost?sslmode=disable&connect_timeout=10
+      MM_SQLSETTINGS_DATASOURCE: DOCKER-SECRET->DATABASE_URL_MATTERMOST
       MM_SERVICESETTINGS_SITEURL: https://mattermost.app.levell.ch
-
+    secrets:
+      - DATABASE_URL_MATTERMOST
     deploy:
       replicas: 1
       update_config:
@@ -39,4 +40,8 @@ networks:
    traefik-public:
     external: true
    levell:
+    external: true
+
+secrets:
+  DATABASE_URL_MATTERMOST:
     external: true
