@@ -1,4 +1,4 @@
-FROM mattermost/mattermost-enterprise-edition:6.3
+FROM mattermost/mattermost-enterprise-edition:7.0.1
 
 USER root
 
