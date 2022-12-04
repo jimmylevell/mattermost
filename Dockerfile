@@ -4,6 +4,9 @@ USER root
 
 RUN mkdir -p /docker
 
+RUN apt-get update -y
+RUN apt-get install dos2unix
+
 COPY ./docker/custom_entrypoint.sh /docker/custom_entrypoint.sh
 RUN chmod +x /docker/custom_entrypoint.sh
 RUN dos2unix /docker/custom_entrypoint.sh
