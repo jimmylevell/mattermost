@@ -52,6 +52,7 @@ jobs:
         with:
           push: true
           context: .
+          target: levell-mattermost-deploy
           tags: |
             ghcr.io/jimmylevell/mattermost/mattermost:latest
       -
