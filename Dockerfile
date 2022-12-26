@@ -1,7 +1,7 @@
 ###############################################################################################
 # levell mattermost - BASE
 ###############################################################################################
-FROM mattermost/mattermost-enterprise-edition:7.5.1 as levell-mattermost-base
+FROM mattermost/mattermost-enterprise-edition:7.5.2 as levell-mattermost-base
 
 USER root
 
